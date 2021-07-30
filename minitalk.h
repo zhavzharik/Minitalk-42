@@ -10,7 +10,6 @@
 # include <stdint.h>
 
 static size_t	g_offset = 0;
-static uint8_t	g_ch = 0;
 
 void	ft_putchar(char c);
 int		ft_strlen(char *str);

@@ -6,7 +6,7 @@
 /*   By: abridger <abridger@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:16:33 by abridger          #+#    #+#             */
-/*   Updated: 2021/07/29 18:15:30 by abridger         ###   ########.fr       */
+/*   Updated: 2021/07/30 14:45:13 by abridger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	client_hdl(int sig, siginfo_t *siginfo, void *context)
 	{
 		ft_putstr("Server with PID: ");
 		ft_putnbr(siginfo->si_pid);
-		ft_putstr(" got a symbol.\n");
+		ft_putstr(" got a message.\n");
 	}
 	else
 		ft_puterror("Error signal.");
@@ -68,7 +68,8 @@ int	main(int argc, char *argv[])
 	if ((sigaction(SIGUSR1, &act, NULL)) < 0)
 		ft_puterror("Message confirmation error.");
 	send_message(nbr, argv[2]);
+	send_message(nbr, "\n");
 	while (1)
-		sleep (10);
+		pause();
 	return (0);
 }

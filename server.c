@@ -6,7 +6,7 @@
 /*   By: abridger <abridger@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 15:16:48 by abridger          #+#    #+#             */
-/*   Updated: 2021/07/29 18:17:05 by abridger         ###   ########.fr       */
+/*   Updated: 2021/07/30 15:22:51 by abridger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,28 @@
 
 static void	server_hdl(int sig, siginfo_t *siginfo, void *context)
 {
+	static uint8_t	ch;
+
 	(void)context;
 	if (sig == SIGUSR1)
 	{
-		g_ch += 1 << g_offset;
+		ch += 1 << g_offset;
 		g_offset++;
 	}
 	else if (sig == SIGUSR2)
 		g_offset++;
 	if (g_offset == sizeof(char) * CHAR_BIT)
 	{
-		if (g_ch == 0)
+		if (ch == 0)
 			write(1, "\n", 1);
 		else
 		{
-			ft_putchar(g_ch);
-			g_ch = 0;
+			ft_putchar(ch);
+			if (ch == 10)
+				kill(siginfo->si_pid, SIGUSR1);
+			ch = 0;
 			g_offset = 0;
 		}
-		if (kill(siginfo->si_pid, SIGUSR1) < 0)
-			ft_puterror("I can not send confirmation to the client");
 	}
 }
 
@@ -55,6 +57,6 @@ int	main(int argc, char *argv[])
 	if (sigaction(SIGUSR2, &act, NULL) < 0)
 		ft_puterror("Error signal.");
 	while (1)
-		sleep (10);
+		usleep (100);
 	return (0);
 }
